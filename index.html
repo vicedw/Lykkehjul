@@ -144,7 +144,12 @@
     const messageEl = document.getElementById("message");
     const resultEl = document.getElementById("result");
 
-    const names = ["Hanna", "Hans", "Ivar", "Caroline", "Line", "Victoria"];
+    const baseNames = ["Hanna", "Hans", "Ivar", "Caroline", "Line", "Victoria"];
+const names = [];
+
+for (let i = 0; i < 6; i++) {
+  names.push(...baseNames);
+}
     const allowed = ["Hanna", "Hans", "Ivar", "Caroline", "Line"];
 
     const colors = [
@@ -155,6 +160,11 @@
       "#fff0b8",
       "#d9d4ff"
     ];
+    const colors = [];
+
+for (let i = 0; i < 6; i++) {
+  colors.push(...baseColors);
+}
 
     const centerX = 250;
     const centerY = 250;
