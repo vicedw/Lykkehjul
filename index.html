@@ -226,7 +226,6 @@
         wheelCtx.restore();
       }
 
-      // Midtsirkel
       wheelCtx.beginPath();
       wheelCtx.arc(center, center, 30, 0, Math.PI * 2);
       wheelCtx.fillStyle = "#f8fafc";
@@ -419,14 +418,13 @@
       drawWheel();
 
       const winner = allowed[Math.floor(Math.random() * allowed.length)];
-      winningIndex = pickWinningIndex(winner);
+      const chosenIndex = pickWinningIndex(winner);
 
-      const target = -winningIndex * slice;
+      const target = -chosenIndex * slice;
 
       let delta = normalize(target) - normalize(rotation);
       if (delta < 0) delta += Math.PI * 2;
 
-      // alltid med klokken
       const final = rotation + delta + 10 * Math.PI * 2;
 
       const duration = 8000;
@@ -446,8 +444,10 @@
           requestAnimationFrame(anim);
         } else {
           rotation = normalize(final);
-          drawWheel();
           stopRouletteSound();
+
+          winningIndex = chosenIndex;
+          drawWheel();
 
           messageEl.textContent = "Vi har en vinner!";
           resultEl.textContent = winner;
