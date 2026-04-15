@@ -279,16 +279,7 @@
       try {
         ensureAudioContext();
 
-        rouletteHumOsc = audioCtx.createOscillator();
-        rouletteHumGain = audioCtx.createGain();
-
-        rouletteHumOsc.type = "sawtooth";
-        rouletteHumOsc.frequency.setValueAtTime(52, audioCtx.currentTime);
-        rouletteHumGain.gain.setValueAtTime(0.012, audioCtx.currentTime);
-
-        rouletteHumOsc.connect(rouletteHumGain);
-        rouletteHumGain.connect(audioCtx.destination);
-        rouletteHumOsc.start();
+       
 
         rouletteNoiseTimer = setInterval(playCasinoTick, 85);
       } catch (e) {
