@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>Lykkehjul</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #f0fbf4, #eef8ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    canvas {
+      border-radius: 50%;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #7ed6a7, #8ccff8);
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .result {
+      margin-top: 15px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #0f766e;
+    }
+
+    .pointer {
+      position: absolute;
+      top: calc(50% - 220px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid #333;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="pointer"></div>
+  <canvas id="wheel" width="400" height="400"></canvas>
+  <br>
+  <button onclick="spin()">Snurr</button>
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
+
+const names = ["Caroline", "Line", "Hanna", "Victoria"];
+const allowed = ["Caroline", "Line", "Hanna"]; // Victoria fjernet fra utvalg
+
+const colors = ["#cfeecf", "#ffdcb8", "#c7e7ff", "#f8d2e2"];
+
+let startAngle = 0;
+
+function drawWheel() {
+  const arc = Math.PI * 2 / names.length;
+
+  for (let i = 0; i < names.length; i++) {
+    const angle = startAngle + i * arc;
+
+    ctx.beginPath();
+    ctx.fillStyle = colors[i];
+    ctx.moveTo(200, 200);
+    ctx.arc(200, 200, 200, angle, angle + arc);
+    ctx.fill();
+
+    ctx.save();
+    ctx.translate(200, 200);
+    ctx.rotate(angle + arc / 2);
+    ctx.fillStyle = "#333";
+    ctx.font = "bold 16px Arial";
+    ctx.fillText(names[i], 80, 5);
+    ctx.restore();
+  }
+}
+
+drawWheel();
+
+function spin() {
+  document.getElementById("result").innerText = "";
+
+  // Velg kun fra lovlige navn
+  const winner = allowed[Math.floor(Math.random() * allowed.length)];
+  const index = names.indexOf(winner);
+
+  const arc = 360 / names.length;
+  const stopAngle = 360 - (index * arc) - arc / 2;
+
+  let rotation = Math.random() * 360 + 720 + stopAngle;
+
+  let current = 0;
+  const duration = 3000;
+  const start = performance.now();
+
+  function animate(time) {
+    let progress = (time - start) / duration;
+    if (progress > 1) progress = 1;
+
+    current = rotation * easeOut(progress);
+    startAngle = current * Math.PI / 180;
+
+    ctx.clearRect(0, 0, 400, 400);
+    drawWheel();
+
+    if (progress < 1) {
+      requestAnimationFrame(animate);
+    } else {
+      document.getElementById("result").innerText = winner;
+    }
+  }
+
+  function easeOut(t) {
+    return 1 - Math.pow(1 - t, 3);
+  }
+
+  requestAnimationFrame(animate);
+}
+</script>
+
+</body>
+</html>
