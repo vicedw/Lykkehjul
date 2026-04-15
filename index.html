@@ -420,7 +420,7 @@
       const winner = allowed[Math.floor(Math.random() * allowed.length)];
       const chosenIndex = pickWinningIndex(winner);
 
-      const target = -chosenIndex * slice;
+     const target = -chosenIndex * slice - slice / 2;
 
       let delta = normalize(target) - normalize(rotation);
       if (delta < 0) delta += Math.PI * 2;
